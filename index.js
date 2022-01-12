@@ -40,7 +40,7 @@ app.post("/", (req,res)=>{
   username=req.body.username
   password=req.body.password
   connection.query(`SELECT PASSWORD FROM OWNER WHERE USERNAME="${username}"`,function(error,results){
-    if(error){
+    if(error || results[0]==undefined){
       console.log(error);
       res.redirect("/")
     }
