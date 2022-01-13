@@ -131,6 +131,32 @@ app.post("/newstaff",(req,res)=>{
 
 
 
+app.get("/addfood",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("addfood")
+  }
+})
+
+app.post("/addfood",(req,res)=>{
+  fid=req.body.fid
+  fdesc=req.body.fdesc
+  fname=req.body.fname
+  fprice=req.body.fprice
+
+  connection.query(`INSERT INTO FOOD_ITEMS VALUES (${fid},"${fdesc}","${fname}",${fprice})`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.redirect("/home")
+    }
+})
+
+})
+
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`)
