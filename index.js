@@ -1,6 +1,7 @@
 const express = require('express')
 const mysql= require("mysql");
 const Connection = require('mysql/lib/Connection');
+const { DOUBLE } = require('mysql/lib/protocol/constants/types');
 const app = express()
 const port = 3000
 app.set("view engine","ejs");
@@ -64,6 +65,72 @@ app.get("/home",(req,res)=>{
   }
   
 })
+
+app.get("/admission",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("admission")
+  }
+})
+
+app.post("/admission",(req,res)=>{
+  sname=req.body.name
+  stu_id=req.body.stu_id
+  contact=req.body.contact
+  dob=req.body.dob
+  aadhar=req.body.aadhar
+  line1=req.body.line1
+  line2=req.body.line2
+  city=req.body.city
+  state=req.body.state
+  pincode=req.body.pincode
+  connection.query(`INSERT INTO STUDENT VALUES ("${stu_id}","${sname}",${contact},"${dob}",${aadhar},"${line1}","${line2}","${city}","${state}",${pincode})`,function(err,result){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.redirect("/home")
+      }
+  })
+})
+
+
+
+app.get("/newstaff",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("newstaff")
+  }
+})
+
+app.post("/newstaff",(req,res)=>{
+  staff_name=req.body.staff_name
+  staff_id=req.body.staff_id
+  occupation=req.body.occupation
+  contact=req.body.contact
+  mgr_id=(req.body.mgr_id || "NULL")
+  line1=req.body.line1
+  line2=req.body.line2
+  city=req.body.city
+  state=req.body.state
+  pincode=req.body.pincode
+
+  connection.query(`INSERT INTO STAFF VALUES ("${staff_id}","${staff_name}","${occupation}",${contact},${mgr_id},"${line1}","${line2}","${city}","${state}",${pincode})`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.redirect("/home")
+    }
+})
+})
+
+
+
 
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`)
