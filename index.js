@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const res = require('express/lib/response');
 const mysql= require("mysql");
 const Connection = require('mysql/lib/Connection');
 const { DOUBLE } = require('mysql/lib/protocol/constants/types');
@@ -35,6 +36,11 @@ app.get('/', (req, res) => {
   else{
     res.render("/home")
   }
+})
+
+app.get("/logout",(req,res)=>{
+  loginStatus=false;
+  res.render("login")
 })
 
 app.post("/", (req,res)=>{
@@ -97,6 +103,35 @@ app.post("/admission",(req,res)=>{
 })
 
 
+app.get("/viewtenant",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    connection.query(`SELECT * FROM STUDENT`,function(err,result){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.render("viewtenant",{data:result[0]})
+      }
+    })
+  }
+})
+
+app.post('/searchtenant',(req,res)=>{
+  stu_id=req.body.stu_id
+  connection.query(`SELECT * FROM STUDENT WHERE STU_ID=${stu_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("viewtenant",{data:result[0]})
+    }
+  })
+})
+
+
 
 app.get("/newstaff",(req,res)=>{
   if(!loginStatus){
@@ -131,6 +166,36 @@ app.post("/newstaff",(req,res)=>{
 
 
 
+app.get("/viewstaff",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    connection.query(`SELECT * FROM STAFF`,function(err,result){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.render("viewstaff",{data:result[0]})
+      }
+    })
+  }
+})
+
+app.post('/searchtenant',(req,res)=>{
+  staff_id=req.body.staff_id
+  connection.query(`SELECT * FROM STAFF WHERE STAFF_ID=${staff_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("viewstaff",{data:result[0]})
+    }
+  })
+})
+
+
+
 app.get("/addfood",(req,res)=>{
   if(!loginStatus){
     res.redirect("/")
@@ -145,7 +210,6 @@ app.post("/addfood",(req,res)=>{
   fdesc=req.body.fdesc
   fname=req.body.fname
   fprice=req.body.fprice
-
   connection.query(`INSERT INTO FOOD_ITEMS VALUES (${fid},"${fdesc}","${fname}",${fprice})`,function(err,result){
     if(err){
       console.log(err);
@@ -154,8 +218,43 @@ app.post("/addfood",(req,res)=>{
       res.redirect("/home")
     }
 })
-
 })
+
+app.get("/adddues",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("adddues")
+  }
+})
+
+app.post("/adddues",(req,res)=>{
+  stu_id=req.body.stu_id
+  fbill=parseInt(req.body.fbill);
+  newfbill=0
+  connection.query(`SELECT F_BILL FROM PAYMENT WHERE STU_ID=${stu_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      newfbill=parseInt(result[0])
+      console.log(newfbill);
+    }
+  })
+  newfbill=fbill+newfbill
+  connection.query(`UPDATE PAYMENT SET F_BILL=${newfbill} WHERE STU_ID=${stu_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("adddues")
+    }
+  })
+})
+
+
+
 
 
 app.listen(port, () => {
