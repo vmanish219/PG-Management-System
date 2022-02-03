@@ -92,7 +92,7 @@ app.post("/admission",(req,res)=>{
   city=req.body.city
   state=req.body.state
   pincode=req.body.pincode
-  connection.query(`INSERT INTO STUDENT VALUES ("${stu_id}","${sname}",${contact},"${dob}",${aadhar},"${line1}","${line2}","${city}","${state}",${pincode})`,function(err,result){
+  connection.query(`INSERT INTO STUDENT VALUES ("${stu_id}","${sname}",${contact},"${dob}",${aadhar},"${line1}","${line2}","${city}","${state}",${pincode})`, function(err,result){
       if(err){
         console.log(err);
       }
@@ -103,20 +103,20 @@ app.post("/admission",(req,res)=>{
 })
 
 
-app.get("/viewtenant",(req,res)=>{
+app.get("/viewtenant",async(req,res)=>{
   if(!loginStatus){
     res.redirect("/")
   }
   else{
-    connection.query(`SELECT * FROM STUDENT`,function(err,result){
-      if(err){
-        console.log(err);
-      }
-      else{
-       // console.log(result[0]);
-        res.render("viewtenant",{data:result[0]})
-      }
-    })
+    connection.query(`SELECT * FROM STUDENT`, function (err, result) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          console.log(result[0].DOB);
+          res.render("viewtenant", { dataa: result});
+        }
+      })
   }
 })
 
@@ -127,7 +127,7 @@ app.post('/searchtenant',(req,res)=>{
       console.log(err);
     }
     else{
-      res.render("viewtenant",{data:result[0]})
+      res.render("viewtenant",{data:result})
     }
   })
 })
@@ -177,7 +177,7 @@ app.get("/viewstaff",(req,res)=>{
         console.log(err);
       }
       else{
-        res.render("viewstaff",{data:result[0]})
+        res.render("viewstaff",{dataa:result})
       }
     })
   }

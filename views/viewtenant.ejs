@@ -4,12 +4,46 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tenants</title>
 </head>
 <body>
-    <!-- <p><%= data %></p> -->
-    <% for( let index = 0; index < data.length; index++ ) { %>
-     <p> <%= data[0].STU_NAME %>  </p>
-    <% } %>
+    
+    <table>
+    <tr>
+        <th>Name</th>
+        <th>StudentID</th>
+        <th>Contact</th>
+        <th>DOB</th>
+        <th>Aadhar</th>
+        <th>Line1</th>
+        <th>Line2</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Pincode</th>
+    </tr>
+    <% 
+        if(dataa.length!=0){
+        var i=1;
+        dataa.forEach(data =>{
+         %>
+         <tr>
+            <td><%= data.STU_NAME %></td>
+            <td><%= data.STU_ID %></td>
+            <td><%= data.STU_CONTACT %></td>
+            <td><%= data.DOB %></td>
+            <td><%= data.AADHAR %></td>
+            <td><%= data.LINE_1 %></td>
+            <td><%= data.LINE_2 %></td>
+            <td><%= data.CITY %></td>
+            <td><%= data.STATE %></td>
+            <td><%= data.PINCODE %></td>
+        </tr>   
+      <% i++  }) %>
+    <% } else { %>
+        <tr>
+            <td colspan="10">No Data found</td>
+            </tr>
+        <% } %>
+    </table>
 </body>
 </html>
