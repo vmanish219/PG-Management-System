@@ -1,0 +1,41 @@
+
+app.get("/addfbill",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("adddues")
+  }
+})
+var oldfbill=0
+app.post("/addfbill",async(req,res)=>{
+  stu_id=req.body.stu_id
+  fbill=parseInt(req.body.fbill);
+    connection.query(`UPDATE PAYMENT SET F_BILL=${newfbill} WHERE STU_ID=${stu_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("adddues")
+    }
+  })
+
+  //oldfbill
+//   await connection.query(`SELECT F_BILL FROM PAYMENT WHERE STU_ID=${stu_id}`,function (err,result){
+//     if(err){
+//       console.log(err);
+//     }
+//     else{
+//       setTimeout(() => {
+        
+//       }, 5000);
+//       oldfbill=parseInt(result[0].F_BILL);
+//       //console.log(oldfbill);
+//     }
+//   })
+//  // console.log(oldfbill);
+//   var newfbill=0
+//   //  console.log(oldfbill);
+//   newfbill=fbill+oldfbill
+
+})

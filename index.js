@@ -113,6 +113,7 @@ app.get("/viewtenant",(req,res)=>{
         console.log(err);
       }
       else{
+       // console.log(result[0]);
         res.render("viewtenant",{data:result[0]})
       }
     })
@@ -182,7 +183,7 @@ app.get("/viewstaff",(req,res)=>{
   }
 })
 
-app.post('/searchtenant',(req,res)=>{
+app.post('/searchstaff',(req,res)=>{
   staff_id=req.body.staff_id
   connection.query(`SELECT * FROM STAFF WHERE STAFF_ID=${staff_id}`,function(err,result){
     if(err){
@@ -231,27 +232,124 @@ app.get("/adddues",(req,res)=>{
 
 app.post("/adddues",(req,res)=>{
   stu_id=req.body.stu_id
-  fbill=parseInt(req.body.fbill);
-  newfbill=0
-  connection.query(`SELECT F_BILL FROM PAYMENT WHERE STU_ID=${stu_id}`,function(err,result){
+  rent=req.body.rent
+  fbill=req.body.fbill
+  deposit=req.body.deposit
+  connection.query(`INSERT INTO PAYMENT (RENT,DEPOSIT,STU_ID) VALUES (${rent},${deposit},${stu_id})`,function(err,result){
     if(err){
       console.log(err);
     }
     else{
-      newfbill=parseInt(result[0])
-      console.log(newfbill);
-    }
-  })
-  newfbill=fbill+newfbill
-  connection.query(`UPDATE PAYMENT SET F_BILL=${newfbill} WHERE STU_ID=${stu_id}`,function(err,result){
-    if(err){
-      console.log(err);
-    }
-    else{
+      connection.query(`CALL TOTAL_DUE(${stu_id})`)
       res.render("adddues")
     }
   })
 })
+
+app.get("/viewpayment",(req,res)=>{
+  connection.query(`CALL TOTAL_DUE(${stu_id})`)
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    connection.query(`SELECT * FROM PAYMENT`,function(err,result){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.render("viewpayment",{data:result[0]})
+      }
+    })
+    
+  }
+})
+
+app.get("/makepayment",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("makepayment")
+  }
+})
+
+app.post("/makepayment",(req,res)=>{
+  stu_id=req.body.stu_id;
+  amt=req.body.amt
+  connection.query(`UPDATE PAYMENT SET TOTAL_DUE=TOTAL_DUE-${amt} WHERE STU_ID=${stu_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("makepayment")
+    }
+  })
+
+})
+
+app.get("/roomassign",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("roomassign")
+  }
+})
+
+app.post("/roomassign",(req,res)=>{
+  stu_id=req.body.stu_id;
+  rno=req.body.roomno;
+  connection.query(`INSERT INTO OCCUPIED_BY VALUES (${rno},${stu_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("roomassign")
+    }
+  })
+})
+
+app.get("viewroom",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    connection.query(`SELECT S.STU_NAME,S.CONTACT,S.ROOM_ID FROM STUDENT S,OCCUPIED_BY O WHERE S.STU_ID=O.STU_ID `,function(err,result){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.render("viewpayment",{data:result[0]})
+      }
+    })
+    
+  }
+})
+
+
+app.get("/foodentry",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    res.render("foodentry")
+  }
+})
+
+app.post("/foodentry",(req,res)=>{
+  stu_id=req.body.stu_id
+  f_id=req.body.f_id
+  connection.query(`INSERT INTO EATS VALUES (${f_id},${stu_id}`,function(err,result){
+    if(err){
+      console.log(err);
+    }
+    else{
+      res.render("foodentry")
+    }
+  })
+})
+
+
 
 
 
