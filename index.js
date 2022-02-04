@@ -206,6 +206,22 @@ app.get("/addfood",(req,res)=>{
   }
 })
 
+app.get("/viewfood",(req,res)=>{
+  if(!loginStatus){
+    res.redirect("/")
+  }
+  else{
+    connection.query(`SELECT * FROM FOOD_ITEMS`,function(err,result){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.render("viewfood",{dataa:result})
+      }
+    })
+  }
+})
+
 app.post("/addfood",(req,res)=>{
   fid=req.body.fid
   fdesc=req.body.fdesc
