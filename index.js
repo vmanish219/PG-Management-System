@@ -326,17 +326,17 @@ app.post("/roomassign",(req,res)=>{
   })
 })
 
-app.get("viewroom",(req,res)=>{
+app.get("/viewroom",(req,res)=>{
   if(!loginStatus){
     res.redirect("/")
   }
   else{
-    connection.query(`SELECT S.STU_NAME,S.CONTACT,S.ROOM_ID FROM STUDENT S,OCCUPIED_BY O WHERE S.STU_ID=O.STU_ID `,function(err,result){
+    connection.query(`SELECT S.STU_NAME,O.ROOM_ID FROM STUDENT S,OCCUPIED_BY O WHERE S.STU_ID=O.STU_ID `,function(err,result){
       if(err){
         console.log(err);
       }
       else{
-        res.render("viewpayment",{data:result[0]})
+        res.render("viewroom",{dataa:result})
       }
     })
     

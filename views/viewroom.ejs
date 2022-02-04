@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>Room ID</th>
+            <th>Student Name</th>
+            
+        </tr>
+        <% 
+            if(dataa.length!=0){
+            var i=1;
+            dataa.forEach(data =>{
+             %>
+             <tr>
+                <td><%= data.ROOM_ID %></td>
+                <td><%= data.STU_NAME %></td>
+                
+            </tr>   
+          <% i++  }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="5">No Data found</td>
+                </tr>
+            <% } %>
+    </table>
+</body>
+</html>
