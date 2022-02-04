@@ -7,6 +7,33 @@
     <title>Payments</title>
 </head>
 <body>
+    <table>
+        <tr>
+            <th>StudentID</th>
+            <th>Rent</th>
+            <th>Deposit</th>
+            <th>Food Bill</th>
+            <th>Total Dues</th>
+        </tr>
+        <% 
+            if(dataa.length!=0){
+            var i=1;
+            dataa.forEach(data =>{
+             %>
+             <tr>
+                <td><%= data.STU_ID %></td>
+                <td><%= data.RENT %></td>
+                <td><%= data.DEPOSIT %></td>
+                <td><%= data.F_BILL %></td>
+                <td><%= data.TOTAL_DUE %></td>
+            </tr>   
+          <% i++  }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="5">No Data found</td>
+                </tr>
+            <% } %>
+    </table>
     
 </body>
 </html>

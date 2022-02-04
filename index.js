@@ -113,7 +113,7 @@ app.get("/viewtenant",async(req,res)=>{
           console.log(err);
         }
         else {
-          console.log(result[0].DOB);
+          //console.log(result[0].DOB);
           res.render("viewtenant", { dataa: result});
         }
       })
@@ -247,7 +247,7 @@ app.post("/adddues",(req,res)=>{
 })
 
 app.get("/viewpayment",(req,res)=>{
-  connection.query(`CALL TOTAL_DUE(${stu_id})`)
+  //connection.query(`CALL TOTAL_DUE(${stu_id})`)
   if(!loginStatus){
     res.redirect("/")
   }
@@ -257,7 +257,8 @@ app.get("/viewpayment",(req,res)=>{
         console.log(err);
       }
       else{
-        res.render("viewpayment",{data:result[0]})
+       // console.log(result);
+        res.render("viewpayment",{dataa:result})
       }
     })
     
