@@ -62,12 +62,47 @@ app.post("/", (req,res)=>{
   })
 })
 
+
+// var someVar = [];
+
+// connection.query("SELECT COUNT(*) AS COUNT FROM ROOM WHERE OCCUPIED_BEDS=0", function(err, rows){
+//   if(err) {
+//     throw err;
+//   } else {
+//     setValue(rows);
+//   }
+// });
+
+// function setValue(value) {
+//   someVar = value;
+ // console.log(someVar[0].COUNT);
+//}
+
+// var d1;
+// connection.query("SELECT COUNT(*) FROM ROOM WHERE OCCUPIED_BEDS=0",function(err,result){
+//   if(err){
+//     console.log(err);
+//   }
+//   else{
+//     d1=result;
+//   }
+// })
+// console.log(d1);
+
 app.get("/home",(req,res)=>{
   if(!loginStatus){
     res.redirect("/")
   }
   else{
-    res.render("home")
+    connection.query("SELECT COUNT(*) AS COUNT FROM ROOM WHERE OCCUPIED_BEDS=0",function(err,result){
+        if(err){
+          console.log(err);
+        }
+        else{
+          console.log(result[0].COUNT);
+          res.render("home",{data:result[0].COUNT})
+        }
+      })
   }
   
 })
